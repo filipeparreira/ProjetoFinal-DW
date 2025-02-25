@@ -6,19 +6,36 @@ include 'backend/bd.php';
 $sqlPromocoes = "SELECT * FROM produtos WHERE promocao = 'sim' AND situacao = 'A'";
 $resultPromocoes = mysqli_query($strcon, $sqlPromocoes) or die(mysqli_error($strcon));
 
-$sqlTatuadeira = "SELECT * FROM produtos WHERE categoria = 'Tatuadeira' AND situacao = 'A'";
-$resultTatuadeira = mysqli_query($strcon, $sqlTatuadeira) or die(mysqli_error($strcon));
+// Para cada categoria, usamos um JOIN com a tabela 'grupos'
+// Certifique-se de que os nomes dos grupos são exatamente os mesmos definidos na tabela 'grupos'
+$sqlTatuadeiras = "SELECT p.* 
+                    FROM produtos p 
+                    JOIN grupos g ON p.grupo_id = g.id 
+                    WHERE g.nomegrupo = 'Tatuadeiras' AND p.situacao = 'A'";
+$resultTatuadeiras = mysqli_query($strcon, $sqlTatuadeiras) or die(mysqli_error($strcon));
 
-$sqlTintas = "SELECT * FROM produtos WHERE categoria = 'Tintas' AND situacao = 'A'";
-$resultTintas = mysqli_query($strcon, $sqlTintaas) or die(mysqli_error($strcon));
+$sqlTintas = "SELECT p.* 
+              FROM produtos p 
+              JOIN grupos g ON p.grupo_id = g.id 
+              WHERE g.nomegrupo = 'Tintas e Pastas' AND p.situacao = 'A'";
+$resultTintas = mysqli_query($strcon, $sqlTintas) or die(mysqli_error($strcon));
 
-$sqlBrincos = "SELECT * FROM produtos WHERE categoria = 'Brincos' AND situacao = 'A'";
+$sqlBrincos = "SELECT p.* 
+               FROM produtos p 
+               JOIN grupos g ON p.grupo_id = g.id 
+               WHERE g.nomegrupo = 'Brincos e Aplicadores' AND p.situacao = 'A'";
 $resultBrincos = mysqli_query($strcon, $sqlBrincos) or die(mysqli_error($strcon));
 
-$sqlMarcadores = "SELECT * FROM produtos WHERE categoria = 'Marcadores' AND situacao = 'A'";
+$sqlMarcadores = "SELECT p.* 
+                  FROM produtos p 
+                  JOIN grupos g ON p.grupo_id = g.id 
+                  WHERE g.nomegrupo = 'Marcadores e Fogareiros' AND p.situacao = 'A'";
 $resultMarcadores = mysqli_query($strcon, $sqlMarcadores) or die(mysqli_error($strcon));
 
-$sqlDiversos = "SELECT * FROM produtos WHERE categoria = 'Diversos' AND situacao = 'A'";
+$sqlDiversos = "SELECT p.* 
+                FROM produtos p 
+                JOIN grupos g ON p.grupo_id = g.id 
+                WHERE g.nomegrupo = 'Diversos' AND p.situacao = 'A'";
 $resultDiversos = mysqli_query($strcon, $sqlDiversos) or die(mysqli_error($strcon));
 ?>
 <!DOCTYPE html>
@@ -29,8 +46,8 @@ $resultDiversos = mysqli_query($strcon, $sqlDiversos) or die(mysqli_error($strco
     <title>BP Rural Produtos Agropecuários</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilização extra para a seção de promoções */
-        #promocoes .promocoes-container {
+        /* Estilização extra para seções de promoções e categorias */
+        .promocoes-container, .categorias-container {
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
@@ -86,57 +103,130 @@ $resultDiversos = mysqli_query($strcon, $sqlDiversos) or die(mysqli_error($strco
         </nav>
     </header>
     
-    <!-- Seção de Categorias (mantida como exemplo) -->
+    <!-- Seção de Categorias -->
     <section id="categorias">
         <h2>Categorias</h2>
+        
+        <!-- Exemplo: Tatuadeiras -->
         <div class="categoria">
             <h3>Tatuadeiras</h3>
             <p>Confira nossa linha de tatuadeiras para identificação animal.</p>
-            <a href="http://www.schilin.com.br/veterinaria/tatuadeiras" target="_blank">Ver Produtos</a>
-            <div class="promocoes-container">
+            <div class="categorias-container">
                 <?php 
-                while ($produto = mysqli_fetch_assoc($resultPromocoes)) { 
-                    // Preço original
-                    $precoOriginal = $produto['preco'];
-                    // Valor de desconto (absoluto)
-                    $desconto = $produto['desconto'];
-                    // Preço com desconto (simplesmente preço original - desconto)
-                    $precoPromocao = $precoOriginal - $desconto;
-                    // Formata os valores para o padrão brasileiro
-                    $precoOriginalFormatado = "R$ " . number_format($precoOriginal, 2, ',', '.');
-                    $precoPromocaoFormatado = "R$ " . number_format($precoPromocao, 2, ',', '.');
+                if(mysqli_num_rows($resultTatuadeiras) > 0){
+                    while ($produto = mysqli_fetch_assoc($resultTatuadeiras)) {                     
+                ?>    
+                    <div class="produto-promocao">
+                        <a href="produto.html?nome=<?php echo urlencode($produto['nome']); ?>&imagem=backend/<?php echo urlencode($produto['imagem']); ?>&descricao=<?php echo urlencode($produto['descricao']); ?>&fornecedor=<?php echo urlencode($produto['fornecedor']); ?>">
+                            <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                            <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
+                        </a>
+                    </div>
+                <?php 
+                    } 
+                } else {
+                    echo '<p>Sem itens</p>';
+                }
                 ?>
-                <div class="produto-promocao">
-                    <a href="produto.php?id=<?php echo $produto['id']; ?>">
-                        <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
-                        <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
-                        <p class="preco-antigo">De: <?php echo $precoOriginalFormatado; ?></p>
-                        <p class="preco-promocao">Para: <?php echo $precoPromocaoFormatado; ?></p>
-                    </a>
-                </div>
-                <?php } ?>
             </div>
         </div>
+        
+        <!-- Exemplo: Tintas e Pastas -->
         <div class="categoria">
             <h3>Tintas e Pastas</h3>
             <p>Tintas e pastas para tatuagem de animais.</p>
-            <a href="https://www.ruralban.com/identificacao-animal/tatuagem" target="_blank">Ver Produtos</a>
+            <div class="categorias-container">
+                <?php 
+                if(mysqli_num_rows($resultTintas) > 0){
+                    while ($produto = mysqli_fetch_assoc($resultTintas)) {                     
+                ?>    
+                    <div class="produto-promocao">
+                        <a href="produto.html?nome=<?php echo urlencode($produto['nome']); ?>&imagem=backend/<?php echo urlencode($produto['imagem']); ?>&descricao=<?php echo urlencode($produto['descricao']); ?>&fornecedor=<?php echo urlencode($produto['fornecedor']); ?>">
+                            <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                            <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
+                        </a>
+                    </div>
+                <?php 
+                    } 
+                } else {
+                    echo '<p>Sem itens</p>';
+                }
+                ?>
+            </div>
         </div>
+        
+        <!-- Exemplo: Brincos e Aplicadores -->
         <div class="categoria">
             <h3>Brincos e Aplicadores</h3>
             <p>Brincos e aplicadores para identificação animal.</p>
-            <a href="https://www.ruralban.com/identificacao-animal/brincos-aplicadores" target="_blank">Ver Produtos</a>
+            <div class="categorias-container">
+                <?php 
+                if(mysqli_num_rows($resultBrincos) > 0){
+                    while ($produto = mysqli_fetch_assoc($resultBrincos)) {                     
+                ?>    
+                    <div class="produto-promocao">
+                        <a href="produto.html?nome=<?php echo urlencode($produto['nome']); ?>&imagem=backend/<?php echo urlencode($produto['imagem']); ?>&descricao=<?php echo urlencode($produto['descricao']); ?>&fornecedor=<?php echo urlencode($produto['fornecedor']); ?>">
+                            <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                            <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
+                        </a>
+                    </div>
+                <?php 
+                    } 
+                } else {
+                    echo '<p>Sem itens</p>';
+                }
+                ?>
+            </div>
         </div>
+        
+        <!-- Exemplo: Marcadores e Fogareiros -->
         <div class="categoria">
             <h3>Marcadores e Fogareiros</h3>
             <p>Marcadores e fogareiros para identificação animal.</p>
-            <a href="https://www.polite.com.br/marcadores-ct-39-168429.htm" target="_blank">Ver Produtos</a>
+            <div class="categorias-container">
+                <?php 
+                if(mysqli_num_rows($resultMarcadores) > 0){
+                    while ($produto = mysqli_fetch_assoc($resultMarcadores)) {                     
+                ?>    
+                    <div class="produto-promocao">
+                        <a href="produto.html?nome=<?php echo urlencode($produto['nome']); ?>&imagem=backend/<?php echo urlencode($produto['imagem']); ?>&descricao=<?php echo urlencode($produto['descricao']); ?>&fornecedor=<?php echo urlencode($produto['fornecedor']); ?>">
+                            <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                            <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
+                        </a>
+                    </div>
+                <?php 
+                    } 
+                } else {
+                    echo '<p>Sem itens</p>';
+                }
+                ?>
+            </div>
         </div>
+        
+        <!-- Exemplo: Diversos -->
         <div class="categoria">
             <h3>Diversos</h3>
             <p>Produtos diversos para cuidados com animais.</p>
-            <a href="https://www.walmur.com.br/produtos/categoria/para-casco" target="_blank">Ver Produtos</a>
+            <div class="categorias-container">
+                <?php 
+                if(mysqli_num_rows($resultDiversos) > 0){
+                    while ($produto = mysqli_fetch_assoc($resultDiversos)) {                     
+                ?>    
+                    <div class="produto-promocao">
+                        <a href="produto.html?nome=<?php echo urlencode($produto['nome']); ?>&imagem=backend/<?php echo urlencode($produto['imagem']); ?>&descricao=<?php echo urlencode($produto['descricao']); ?>&fornecedor=<?php echo urlencode($produto['fornecedor']); ?>">
+                            <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                            <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
+                        </a>
+                    </div>
+                <?php 
+                    } 
+                } else {
+                    echo '<p>Sem itens</p>';
+                }
+                ?>
+            </div>
         </div>
+        
     </section>
 
     <!-- Seção de Promoções -->
@@ -144,26 +234,32 @@ $resultDiversos = mysqli_query($strcon, $sqlDiversos) or die(mysqli_error($strco
         <h2>Promoções</h2>
         <div class="promocoes-container">
             <?php 
-            while ($produto = mysqli_fetch_assoc($resultPromocoes)) { 
-                // Preço original
-                $precoOriginal = $produto['preco'];
-                // Valor de desconto (absoluto)
-                $desconto = $produto['desconto'];
-                // Preço com desconto (simplesmente preço original - desconto)
-                $precoPromocao = $precoOriginal - $desconto;
-                // Formata os valores para o padrão brasileiro
-                $precoOriginalFormatado = "R$ " . number_format($precoOriginal, 2, ',', '.');
-                $precoPromocaoFormatado = "R$ " . number_format($precoPromocao, 2, ',', '.');
+            if(mysqli_num_rows($resultPromocoes) > 0){
+                while ($produto = mysqli_fetch_assoc($resultPromocoes)) { 
+                    // Preço original
+                    $precoOriginal = $produto['preco'];
+                    // Valor de desconto (absoluto)
+                    $desconto = $produto['desconto'];
+                    // Preço com desconto
+                    $precoPromocao = $precoOriginal - $desconto;
+                    // Formata os valores para o padrão brasileiro
+                    $precoOriginalFormatado = "R$ " . number_format($precoOriginal, 2, ',', '.');
+                    $precoPromocaoFormatado = "R$ " . number_format($precoPromocao, 2, ',', '.');
             ?>
             <div class="produto-promocao">
-                <a href="produto.php?id=<?php echo $produto['id']; ?>">
+                <a  href="produto.html?nome=<?php echo urlencode($produto['nome']); ?>&imagem=backend/<?php echo urlencode($produto['imagem']); ?>&descricao=<?php echo urlencode($produto['descricao']); ?>&fornecedor=<?php echo urlencode($produto['fornecedor']); ?>">
                     <img src="backend/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
                     <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
                     <p class="preco-antigo">De: <?php echo $precoOriginalFormatado; ?></p>
                     <p class="preco-promocao">Para: <?php echo $precoPromocaoFormatado; ?></p>
                 </a>
             </div>
-            <?php } ?>
+            <?php 
+                }
+            } else {
+                echo '<p>Sem itens</p>';
+            }
+            ?>
         </div>
     </section>
 

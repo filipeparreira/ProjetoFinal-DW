@@ -31,6 +31,8 @@ INSERT INTO usuarios (nome, email, senha, perfil)
 VALUES ('admin', 'admin@email.com', '1234', 'editor');
 
 INSERT INTO grupos (nomegrupo, corgrupo, situacaogrupo)
-VALUES ('Tintas e Pastas', '#FF0000', 'ativo'),
-       ('eletronicos', '#00FF00', 'ativo'),
-       ('moveis', '#0000FF', 'ativo');
+VALUES ('Tintas', '#FF0000', 'ativo'),
+       ('Tatuadeira', '#FF0000', 'ativo'),
+       ('Brincos', '#00FF00', 'ativo'),
+       ('Diversos', '#00FF00', 'ativo'),
+       ('Marcadores', '#0000FF', 'ativo');
