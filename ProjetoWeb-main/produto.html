@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="imagens/logo_branca.png" alt="BP Rural Produtos Agropecuários">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="produto">
+        <h2 id="produto-nome">Nome do Produto</h2>
+        <img id="produto-imagem" src="imagens/produto-exemplo.jpg" alt="Imagem do Produto">
+        <p id="produto-descricao">Aqui vai a descrição detalhada do produto.</p>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 BP Rural Produtos Agropecuários. Todos os direitos reservados.</p>
+    </footer>
+    
+    <script>
+        // Captura parâmetros da URL para exibir o produto correto
+        const urlParams = new URLSearchParams(window.location.search);
+        const nome = urlParams.get('nome');
+        const imagem = urlParams.get('imagem');
+        const descricao = urlParams.get('descricao');
+        
+        if (nome) document.getElementById('produto-nome').innerText = nome;
+        if (imagem) document.getElementById('produto-imagem').src = imagem;
+        if (descricao) document.getElementById('produto-descricao').innerText = descricao;
+    </script>
+</body>
+</html>
