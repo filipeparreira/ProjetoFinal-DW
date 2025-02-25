@@ -1,6 +1,11 @@
 <?php
-// verificar sessao if session ("adm")<>"ativo" then
-// encaminhar para login
+session_start();
+
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
 ?>
 <html>
 <form name="frm" action="sql_cad_usuarios.php" method="post" onsubmit="return valida();"><br>

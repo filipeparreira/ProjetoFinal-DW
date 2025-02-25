@@ -1,10 +1,21 @@
 <?php
+
+session_start();
+
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
+
+
 include 'bd.php';
 
 $sql = mysqli_query($strcon, "SELECT * FROM usuarios") or die(
     mysqli_error($cx) //caso haja um erro na consulta
     );
 $aux = mysqli_fetch_assoc($sql)
+
 //end if ?>
 
 
@@ -51,7 +62,7 @@ $aux = mysqli_fetch_assoc($sql)
                 </div>
             </div>
         </section>
-    <a href="..\login.html">Sair</a>
+    <a href="logout.php">Sair</a>
     </main>
 
     <footer>

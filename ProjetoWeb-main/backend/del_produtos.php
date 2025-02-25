@@ -1,9 +1,12 @@
 <?php
-// verificar sessao if session ("adm")<>"ativo" then redirecionar para login
+<?php
+session_start();
 
-//else
-
-// Create connection
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
 include 'bd.php';
  
 //criando a query de consulta toda a tabela usuarios  

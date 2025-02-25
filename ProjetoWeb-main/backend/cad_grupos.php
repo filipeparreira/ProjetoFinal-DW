@@ -1,8 +1,11 @@
 <?php
-//verificar sessão
-//if session ("adm") <> "ativo" then
-    // encaminhar para a pagina de login
-//else
+session_start();
+
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
 ?>
 
 CADASTRO DE GRUPOS

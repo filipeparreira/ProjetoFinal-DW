@@ -1,4 +1,15 @@
 <?php
+
+
+session_start();
+
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
+
+
 include 'bd.php'; // Conexão com o banco
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

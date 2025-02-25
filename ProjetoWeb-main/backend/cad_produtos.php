@@ -1,8 +1,11 @@
 <?php
-//if session ("adm") <> "ativo" then
-//   response.redirect "default.asp"
-//else
-//  connection bd
+session_start();
+
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
 
 
 // Create connection

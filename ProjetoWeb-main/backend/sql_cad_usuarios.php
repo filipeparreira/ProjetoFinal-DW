@@ -1,8 +1,12 @@
 <?php
-// verificar sessão adm 
-//if session ("adm") <> "ativo" then
-    // encaminhar para login
-//else
+session_start();
+
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header('Location: ../login.html'); // Redireciona para a página de login
+    exit();
+}
+
 
 $login = $_POST['txtlogin'];
 $senha = $_POST['txtsenha'];
