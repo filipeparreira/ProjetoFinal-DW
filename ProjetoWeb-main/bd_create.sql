@@ -30,9 +30,9 @@ CREATE TABLE produtos (
 INSERT INTO usuarios (nome, email, senha, perfil)
 VALUES ('admin', 'admin@email.com', '1234', 'editor');
 
-INSERT INTO grupos (nomegrupo, corgrupo, situacaogrupo)
-VALUES ('Tintas', '#FF0000', 'ativo'),
-       ('Tatuadeira', '#FF0000', 'ativo'),
-       ('Brincos', '#00FF00', 'ativo'),
-       ('Diversos', '#00FF00', 'ativo'),
-       ('Marcadores', '#0000FF', 'ativo');
+INSERT INTO grupos (nomegrupo, corgrupo, situacaogrupo) VALUES
+('Tatuadeiras', '#FF5733', 'ativo'),
+('Tintas e Pastas', '#33C3FF', 'ativo'),
+('Brincos e Aplicadores', '#9D33FF', 'ativo'),
+('Marcadores e Fogareiros', '#33FF57', 'ativo'),
+('Diversos', '#FF33B8', 'ativo');
